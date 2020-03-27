@@ -1,0 +1,36 @@
+PODS:
+  - Kingfisher (5.12.0):
+    - Kingfisher/Core (= 5.12.0)
+  - Kingfisher/Core (5.12.0)
+  - NVActivityIndicatorView (4.8.0):
+    - NVActivityIndicatorView/Presenter (= 4.8.0)
+  - NVActivityIndicatorView/Presenter (4.8.0)
+  - PullToDismiss (2.2)
+  - SwiftyBeaver (1.8.4)
+  - SwipeBack (1.1.1)
+
+DEPENDENCIES:
+  - Kingfisher
+  - NVActivityIndicatorView
+  - PullToDismiss
+  - SwiftyBeaver
+  - SwipeBack
+
+SPEC REPOS:
+  trunk:
+    - Kingfisher
+    - NVActivityIndicatorView
+    - PullToDismiss
+    - SwiftyBeaver
+    - SwipeBack
+
+SPEC CHECKSUMS:
+  Kingfisher: dc6e0f53bb5b12c3e75bedb0e01bbd7a640eea69
+  NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
+  PullToDismiss: 033572b7152fbf68db0407db882d546312813837
+  SwiftyBeaver: f9a9aba96a6a6166e21682377804d728b0d20b95
+  SwipeBack: d6759601b40da1f4161033feb30ab475d7d04322
+
+PODFILE CHECKSUM: e9958de975e1a13dafc2a54c640e806d8eda7ea8
+
+COCOAPODS: 1.8.4
