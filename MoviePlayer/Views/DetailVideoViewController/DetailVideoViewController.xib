@@ -13,6 +13,7 @@
                 <outlet property="lbTitle" destination="zyW-x1-lBy" id="wls-WB-6iY"/>
                 <outlet property="sclContent" destination="Rcc-82-4Dw" id="iGh-pC-tVW"/>
                 <outlet property="tvDescription" destination="Tr2-sl-VtR" id="ZZe-9I-m4p"/>
+                <outlet property="vContent" destination="qik-Un-L5l" id="4FM-5L-dUI"/>
                 <outlet property="vPlayerContainer" destination="tJm-gy-vVL" id="zd7-po-2lp"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

@@ -648,6 +648,7 @@ extension VideoPlayerView {
     }
 }
 
+
 fileprivate extension CMTime {
     func durationFormatted() -> String {
         let seconds = CMTimeGetSeconds(self)

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AVFoundation
 import AVKit
 
 class DetailVideoViewController: BaseViewController {
@@ -17,15 +16,19 @@ class DetailVideoViewController: BaseViewController {
     @IBOutlet weak var lbSubtitle: UILabel!
     @IBOutlet weak var tvDescription: UITextView!
     @IBOutlet weak var sclContent: UIScrollView!
+    @IBOutlet weak var vContent: UIView!
     
     
     
     // MARK: - VARIABLES
     var video: Video?
-    var playerController = AVPlayerViewController()
     private var videoPlayerView: VideoPlayerView!
-    private var videoPlayerViewCenter = CGPoint.zero
     private var viewTranslation = CGPoint(x: 0, y: 0)
+    private lazy var panDismissGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer()
+        gesture.addTarget(self, action: #selector(handleDismiss))
+        return gesture
+    }()
     
     // MARK: - OVERRIDES
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -54,7 +57,7 @@ class DetailVideoViewController: BaseViewController {
 
         setUpPlayerView()
         populateData()
-        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        self.view.addGestureRecognizer(panDismissGesture)
     }
 
     deinit {
@@ -85,7 +88,6 @@ class DetailVideoViewController: BaseViewController {
             break
         }
     }
-    
     
     // MARK: - FUNCTIONS
     private func setUpPlayerView() {
@@ -134,45 +136,5 @@ extension DetailVideoViewController: VideoPlayerViewDelegate {
     
     func didTapOnButtonFullscreen(in playerView: VideoPlayerView) {
         
-    }
-    
-    @objc func avPlayerClosed(_ notification: Notification) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            self.videoPlayerView.player?.play()
-        }
-    }
-    
-    private func handleFullScreen(for playerView: VideoPlayerView) {
-        if !playerView.isFullscreen {
-            UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { [weak self] in
-                guard let self = self else { return }
-                self.vPlayerContainer.translatesAutoresizingMaskIntoConstraints = false
-                self.videoPlayerViewCenter = self.vPlayerContainer.center
-                self.vPlayerContainer.frame = CGRect(x: 0, y: 0, width: screenHeight, height: screenWidth)
-                playerView.playerLayer.frame = CGRect(x: 0, y: 0, width: screenHeight, height: screenWidth)
-                self.vPlayerContainer.center = self.view.center
-                self.vPlayerContainer.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
-                self.vPlayerContainer.layoutSubviews()
-                self.view.layoutIfNeeded()
-            }) { [weak self] (finished) in
-                guard let self = self else { return }
-                playerView.isFullscreen.toggle()
-            }
-        } else {
-            UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.vPlayerContainer.transform = CGAffineTransform.identity
-                self.vPlayerContainer.center = self.videoPlayerViewCenter
-
-                let height = screenWidth * 9 / 16
-                let videoPlayerFrame = CGRect(x: 0, y: 0, width: screenWidth, height: height)
-                self.vPlayerContainer.frame = videoPlayerFrame
-                self.vPlayerContainer.layoutSubviews()
-                self.view.layoutIfNeeded()
-            }, completion: { [weak self] (finished) in
-                guard let self = self else { return }
-                playerView.isFullscreen.toggle()
-            })
-        }
     }
 }

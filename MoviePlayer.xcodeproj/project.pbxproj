@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		17127AFC0AB73A239BAA2B36 /* Pods_MoviePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C117D3647788C16C2ECB745F /* Pods_MoviePlayer.framework */; };
+		E134416A242F75E200C98EE2 /* FullScreenPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1344168242F75E200C98EE2 /* FullScreenPlayerViewController.swift */; };
+		E134416B242F75E200C98EE2 /* FullScreenPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1344169242F75E200C98EE2 /* FullScreenPlayerViewController.xib */; };
+		E134416D242F7A7100C98EE2 /* Ultilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E134416C242F7A7100C98EE2 /* Ultilities.swift */; };
+		E1344170242F7C7700C98EE2 /* FullScreenPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E134416F242F7C7700C98EE2 /* FullScreenPlayerView.swift */; };
+		E1344172242F7C8000C98EE2 /* FullScreenPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1344171242F7C8000C98EE2 /* FullScreenPlayerView.xib */; };
 		E16BAD1D242E6AC400AA0DE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E16BAD19242E6A8C00AA0DE1 /* AVFoundation.framework */; };
 		E16BAD1E242E6AC400AA0DE1 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E16BAD1A242E6A8C00AA0DE1 /* AVKit.framework */; };
 		E1A77578242DC7FD0068D840 /* PlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A77577242DC7FD0068D840 /* PlayerControlView.swift */; };
@@ -22,7 +27,6 @@
 		E1A77591242E0A3F0068D840 /* VideoListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A7758F242E0A3F0068D840 /* VideoListTableViewCell.xib */; };
 		E1A77593242E0B8A0068D840 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A77592242E0B8A0068D840 /* Video.swift */; };
 		E1A77595242E10710068D840 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A77594242E10710068D840 /* CustomError.swift */; };
-		E1A77598242E28F10068D840 /* RippleAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A77597242E28F10068D840 /* RippleAnimation.swift */; };
 		E1A775DF242E3A780068D840 /* SF-Pro-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1A7759D242E3A780068D840 /* SF-Pro-Display-Thin.otf */; };
 		E1A775E0242E3A780068D840 /* SF-Pro-Display-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1A7759E242E3A780068D840 /* SF-Pro-Display-SemiboldItalic.otf */; };
 		E1A775E1242E3A780068D840 /* SF-Pro-Text-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1A7759F242E3A780068D840 /* SF-Pro-Text-Heavy.otf */; };
@@ -137,6 +141,11 @@
 		503E8A8D0764A769289E415E /* Pods-MoviePlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviePlayer.debug.xcconfig"; path = "Target Support Files/Pods-MoviePlayer/Pods-MoviePlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		793806793023B0442148D6BE /* Pods-MoviePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviePlayer.release.xcconfig"; path = "Target Support Files/Pods-MoviePlayer/Pods-MoviePlayer.release.xcconfig"; sourceTree = "<group>"; };
 		C117D3647788C16C2ECB745F /* Pods_MoviePlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviePlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1344168242F75E200C98EE2 /* FullScreenPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPlayerViewController.swift; sourceTree = "<group>"; };
+		E1344169242F75E200C98EE2 /* FullScreenPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullScreenPlayerViewController.xib; sourceTree = "<group>"; };
+		E134416C242F7A7100C98EE2 /* Ultilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ultilities.swift; sourceTree = "<group>"; };
+		E134416F242F7C7700C98EE2 /* FullScreenPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPlayerView.swift; sourceTree = "<group>"; };
+		E1344171242F7C8000C98EE2 /* FullScreenPlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullScreenPlayerView.xib; sourceTree = "<group>"; };
 		E16BAD19242E6A8C00AA0DE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E16BAD1A242E6A8C00AA0DE1 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		E1A77577242DC7FD0068D840 /* PlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlView.swift; sourceTree = "<group>"; };
@@ -151,7 +160,6 @@
 		E1A7758F242E0A3F0068D840 /* VideoListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoListTableViewCell.xib; sourceTree = "<group>"; };
 		E1A77592242E0B8A0068D840 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		E1A77594242E10710068D840 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
-		E1A77597242E28F10068D840 /* RippleAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleAnimation.swift; sourceTree = "<group>"; };
 		E1A7759D242E3A780068D840 /* SF-Pro-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Thin.otf"; sourceTree = "<group>"; };
 		E1A7759E242E3A780068D840 /* SF-Pro-Display-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-SemiboldItalic.otf"; sourceTree = "<group>"; };
 		E1A7759F242E3A780068D840 /* SF-Pro-Text-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Heavy.otf"; sourceTree = "<group>"; };
@@ -288,6 +296,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E1344165242F75B800C98EE2 /* FullScreenPlayerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E1344168242F75E200C98EE2 /* FullScreenPlayerViewController.swift */,
+				E1344169242F75E200C98EE2 /* FullScreenPlayerViewController.xib */,
+			);
+			path = FullScreenPlayerViewController;
+			sourceTree = "<group>";
+		};
+		E134416E242F7C5300C98EE2 /* FullScreenPlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				E134416F242F7C7700C98EE2 /* FullScreenPlayerView.swift */,
+				E1344171242F7C8000C98EE2 /* FullScreenPlayerView.xib */,
+			);
+			path = FullScreenPlayerView;
+			sourceTree = "<group>";
+		};
 		E1A77576242DC6EF0068D840 /* PlayerControlView */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,7 +384,6 @@
 		E1A77596242E28E70068D840 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				E1A77597242E28F10068D840 /* RippleAnimation.swift */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -529,6 +554,7 @@
 				E1AC0349242D1EFC006EF3F5 /* Helper.swift */,
 				E1AC0348242D1EFC006EF3F5 /* LocalData.swift */,
 				E1AC034B242D1EFC006EF3F5 /* Style.swift */,
+				E134416C242F7A7100C98EE2 /* Ultilities.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -536,6 +562,7 @@
 		E1AC0306242D1EA3006EF3F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E1344165242F75B800C98EE2 /* FullScreenPlayerViewController */,
 				E1A7758B242E0A0B0068D840 /* Cells */,
 				E1A77583242E05890068D840 /* VideoListViewController */,
 				E1A77580242DE1420068D840 /* BaseViewController */,
@@ -627,6 +654,7 @@
 		E1AC0354242D1F87006EF3F5 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				E134416E242F7C5300C98EE2 /* FullScreenPlayerView */,
 				E1A7757B242DDD040068D840 /* VideoPlayerView */,
 				E1A77576242DC6EF0068D840 /* PlayerControlView */,
 				E1AC0355242D1F8C006EF3F5 /* PlayerView */,
@@ -767,6 +795,7 @@
 				E1A7761F242E3A780068D840 /* SFPro_Font_License.rtf in Resources */,
 				E1A775FD242E3A780068D840 /* SFProText-Medium.ttf in Resources */,
 				E1A775F4242E3A780068D840 /* SF-Pro-Text-BoldItalic.otf in Resources */,
+				E134416B242F75E200C98EE2 /* FullScreenPlayerViewController.xib in Resources */,
 				E1A77619242E3A780068D840 /* SFProDisplay-HeavyItalic.ttf in Resources */,
 				E1A775F0242E3A780068D840 /* SF-Pro-Display-UltralightItalic.otf in Resources */,
 				E1AC02FA242D1DFD006EF3F5 /* Assets.xcassets in Resources */,
@@ -779,6 +808,7 @@
 				E1A775F2242E3A780068D840 /* SF-Pro-Display-BlackItalic.otf in Resources */,
 				E1A77602242E3A780068D840 /* SFProDisplay-SemiboldItalic.ttf in Resources */,
 				E1A775F6242E3A780068D840 /* SF-Pro-Text-Semibold.otf in Resources */,
+				E1344172242F7C8000C98EE2 /* FullScreenPlayerView.xib in Resources */,
 				E1A77601242E3A780068D840 /* SFProDisplay-RegularItalic.ttf in Resources */,
 				E1A7760B242E3A780068D840 /* SFProText-LightItalic.ttf in Resources */,
 				E1AC0364242D246C006EF3F5 /* Main.storyboard in Resources */,
@@ -849,6 +879,7 @@
 				E1AC034E242D1EFC006EF3F5 /* Device.swift in Sources */,
 				E1AC0339242D1EE6006EF3F5 /* EX_CALayer.swift in Sources */,
 				E1AC032A242D1EE6006EF3F5 /* IB_UITextField.swift in Sources */,
+				E134416D242F7A7100C98EE2 /* Ultilities.swift in Sources */,
 				E1AC0334242D1EE6006EF3F5 /* EX_CGFloat.swift in Sources */,
 				E1A77593242E0B8A0068D840 /* Video.swift in Sources */,
 				E1AC0330242D1EE6006EF3F5 /* EX_URL.swift in Sources */,
@@ -862,6 +893,7 @@
 				E1A77578242DC7FD0068D840 /* PlayerControlView.swift in Sources */,
 				E1AC0343242D1EE6006EF3F5 /* EUIView.swift in Sources */,
 				E1AC032F242D1EE6006EF3F5 /* EX_UIPanGesture.swift in Sources */,
+				E134416A242F75E200C98EE2 /* FullScreenPlayerViewController.swift in Sources */,
 				E1AC035D242D213B006EF3F5 /* DetailVideoViewController.swift in Sources */,
 				E1AC02F1242D1DFA006EF3F5 /* AppDelegate.swift in Sources */,
 				E1A77586242E05A80068D840 /* VideoListViewController.swift in Sources */,
@@ -870,6 +902,7 @@
 				E1AC0340242D1EE6006EF3F5 /* EX_UITableView.swift in Sources */,
 				E1AC0353242D1EFD006EF3F5 /* AppConstants.swift in Sources */,
 				E1A77595242E10710068D840 /* CustomError.swift in Sources */,
+				E1344170242F7C7700C98EE2 /* FullScreenPlayerView.swift in Sources */,
 				E1AC0352242D1EFD006EF3F5 /* Style.swift in Sources */,
 				E1AC0363242D246C006EF3F5 /* ViewController.swift in Sources */,
 				E1AC032B242D1EE6006EF3F5 /* IB_UIButton.swift in Sources */,
@@ -886,7 +919,6 @@
 				E1AC0357242D1FAF006EF3F5 /* PlayerView.swift in Sources */,
 				E1AC0366242D28C8006EF3F5 /* UIView+GestureRecognizer.swift in Sources */,
 				E1A7757D242DDD2C0068D840 /* VideoPlayerView.swift in Sources */,
-				E1A77598242E28F10068D840 /* RippleAnimation.swift in Sources */,
 				E1AC0336242D1EE6006EF3F5 /* EX_String.swift in Sources */,
 				E1AC032E242D1EE6006EF3F5 /* EUIImage.swift in Sources */,
 				E1AC0335242D1EE6006EF3F5 /* EX_UINavigationBar.swift in Sources */,

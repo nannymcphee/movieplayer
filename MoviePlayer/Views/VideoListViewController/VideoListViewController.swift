@@ -31,6 +31,10 @@ class VideoListViewController: BaseViewController {
         return button
     }()
     
+    override var prefersStatusBarHidden: Bool {
+        return false
+    }
+    
     // MARK: - OVERRIDES
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +43,7 @@ class VideoListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,7 +104,7 @@ class VideoListViewController: BaseViewController {
         tbVideos.refreshControl = refreshControl
     }
     
-    func loadListVideo() {
+    private func loadListVideo() {
         if let path = Bundle.main.path(forResource: "videos", ofType: "json") {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
@@ -126,6 +131,30 @@ class VideoListViewController: BaseViewController {
             "Invalid filename/path.".alert(self)
         }
     }
+    
+    private func presentActionSheet(video: Video) {
+        let alertController = UIAlertController(title: "Select Action", message: nil, preferredStyle: .actionSheet)
+        let detailAction = UIAlertAction(title: "Go To Detail", style: .default) { [weak self] (action) in
+            guard let self = self else { return }
+            let detailVC = DetailVideoViewController()
+            detailVC.video = video
+            detailVC.modalPresentationStyle = .overCurrentContext
+            self.present(detailVC, animated: true, completion: nil)
+        }
+        
+        let fullScreenAction = UIAlertAction(title: "Full-screen Player", style: .default) { [weak self] (action) in
+            guard let self = self else { return }
+            let fullScreenVC = FullScreenPlayerViewController()
+            fullScreenVC.video = video
+            fullScreenVC.modalPresentationStyle = .overCurrentContext
+            self.present(fullScreenVC, animated: true, completion: nil)
+        }
+        
+        alertController.addAction(detailAction)
+        alertController.addAction(fullScreenAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
 
 // MARK: - EXTENSIONS
@@ -146,9 +175,10 @@ extension VideoListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let video = videoList[indexPath.row]
-        let detailVC = DetailVideoViewController()
-        detailVC.video = video
-        detailVC.modalPresentationStyle = .overCurrentContext
-        self.present(detailVC, animated: true, completion: nil)
+        presentActionSheet(video: video)
+//        let detailVC = DetailVideoViewController()
+//        detailVC.video = video
+//        detailVC.modalPresentationStyle = .overCurrentContext
+//        self.present(detailVC, animated: true, completion: nil)
     }
 }

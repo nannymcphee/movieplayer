@@ -25,12 +25,20 @@ import UIKit
 
 public extension UIView {
     
-    func addTapGestureRecognizer(numberOfTaps: Int? = 1, action: (() -> Void)?) {
+    func addTapGestureRecognizer(action: (() -> Void)?) {
         tapAction = action
         isUserInteractionEnabled = true
         let selector = #selector(handleTap)
         let recognizer = UITapGestureRecognizer(target: self, action: selector)
-        recognizer.numberOfTapsRequired = numberOfTaps.or(other: 1)
+        addGestureRecognizer(recognizer)
+    }
+    
+    func addDoubleTapGestureRecognizer(action: (() -> Void)?) {
+        doubleTapAction = action
+        isUserInteractionEnabled = true
+        let selector = #selector(handleDoubleTap)
+        let recognizer = UITapGestureRecognizer(target: self, action: selector)
+        recognizer.numberOfTapsRequired = 2
         addGestureRecognizer(recognizer)
     }
     
@@ -79,5 +87,20 @@ fileprivate extension UIView {
 
     @objc func handleTap(sender: UITapGestureRecognizer) {
         tapAction?()
+    }
+    
+    var doubleTapAction: Action? {
+        get {
+            return objc_getAssociatedObject(self, &Key.id) as? Action
+        }
+        set {
+            guard let value = newValue else { return }
+            let policy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN
+            objc_setAssociatedObject(self, &Key.id, value, policy)
+        }
+    }
+    
+    @objc func handleDoubleTap(sender: UITapGestureRecognizer) {
+        doubleTapAction?()
     }
 }
