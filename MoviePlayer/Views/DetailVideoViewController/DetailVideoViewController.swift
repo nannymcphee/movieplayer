@@ -25,7 +25,7 @@ class DetailVideoViewController: BaseViewController {
     var playerController = AVPlayerViewController()
     private var videoPlayerView: VideoPlayerView!
     private var videoPlayerViewCenter = CGPoint.zero
-    
+    private var viewTranslation = CGPoint(x: 0, y: 0)
     
     // MARK: - OVERRIDES
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -35,6 +35,7 @@ class DetailVideoViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+        Helper.setupStatusBar(style: .lightContent, backgroundColor: UIColor.black)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,9 +52,9 @@ class DetailVideoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Helper.setupStatusBar(style: .lightContent, backgroundColor: UIColor.black)
         setUpPlayerView()
         populateData()
+        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
     }
 
     deinit {
@@ -61,7 +62,29 @@ class DetailVideoViewController: BaseViewController {
     }
 
     // MARK: - ACTIONS
-    
+    @objc func handleDismiss(sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .changed:
+            if sender.direction != PanDirection.up && sclContent.isAtTop {
+                viewTranslation = sender.translation(in: view)
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
+                })
+            }
+            
+        case .ended:
+            let dismissableValue = screenHeight * 0.4
+            if viewTranslation.y < dismissableValue {
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.view.transform = .identity
+                })
+            } else {
+                dismiss(animated: true, completion: nil)
+            }
+        default:
+            break
+        }
+    }
     
     
     // MARK: - FUNCTIONS
@@ -89,7 +112,7 @@ class DetailVideoViewController: BaseViewController {
 // MARK: - EXTENSIONS
 extension DetailVideoViewController: VideoPlayerViewDelegate {
     func playerView(_ playerView: VideoPlayerView, didUpdate playbackTime: Double) {
-//        log.debug("Playback time: \(playbackTime)")
+        
     }
     
     func playerView(_ playerView: VideoPlayerView, didUpdate status: AVPlayerItem.Status) {
@@ -152,13 +175,4 @@ extension DetailVideoViewController: VideoPlayerViewDelegate {
             })
         }
     }
-}
-
-extension DetailVideoViewController: AVPlayerViewControllerDelegate {
-    func playerViewController(_ playerViewController: AVPlayerViewController, restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
-             let currentviewController =  navigationController?.visibleViewController
-             if currentviewController != playerViewController {
-                 currentviewController?.present(playerViewController,animated: true,completion:nil)
-             }
-         }
 }

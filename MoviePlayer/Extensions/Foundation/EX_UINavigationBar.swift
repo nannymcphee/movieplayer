@@ -9,10 +9,17 @@
 import UIKit
 
 extension UINavigationBar {
-    func initDefaultStyle() {
-        self.isTranslucent = false
+    func applyDefaultStyle() {
+        self.isTranslucent = true
         self.shadowImage = UIImage()
         self.setBackgroundImage(UIImage(color: colorScheme.background), for: .default)
+    }
+    
+    func applyClearStyle() {
+        self.setBackgroundImage(UIImage(), for: .default)
+        self.shadowImage = UIImage()
+        self.barTintColor = .clear
+        self.isTranslucent = true
     }
     
     open override func sizeThatFits(_ size: CGSize) -> CGSize {

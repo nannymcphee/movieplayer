@@ -81,7 +81,7 @@
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" red="0.96862745100000003" green="0.98039215690000003" blue="0.98823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="tJm-gy-vVL" secondAttribute="trailing" id="L1d-Qx-oVv"/>
                                 <constraint firstItem="T1h-xt-As8" firstAttribute="leading" secondItem="qik-Un-L5l" secondAttribute="leading" id="LEQ-uW-7YM"/>
@@ -93,7 +93,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.96862745100000003" green="0.98039215690000003" blue="0.98823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <constraints>
                         <constraint firstItem="qik-Un-L5l" firstAttribute="height" secondItem="Rcc-82-4Dw" secondAttribute="height" priority="750" id="9vT-Aa-r8T"/>
                         <constraint firstAttribute="trailing" secondItem="qik-Un-L5l" secondAttribute="trailing" id="HOK-wg-jel"/>
@@ -104,7 +104,7 @@
                     </constraints>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" red="0.96862745100000003" green="0.98039215690000003" blue="0.98823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="Rcc-82-4Dw" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="0of-7M-HHP"/>
                 <constraint firstAttribute="bottom" secondItem="Rcc-82-4Dw" secondAttribute="bottom" id="iPf-WG-H6D"/>

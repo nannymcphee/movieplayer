@@ -202,6 +202,7 @@
                 <outlet property="lbTotalTime" destination="2bP-pf-HDf" id="TjE-oY-JqM"/>
                 <outlet property="loadingActivityIndicator" destination="dBO-HS-Bhj" id="scP-Cv-1yo"/>
                 <outlet property="slProgress" destination="q5C-TZ-qgg" id="Ga1-Ra-rQb"/>
+                <outlet property="vBottomBottomConstraint" destination="KLk-eL-SbA" id="iMT-kd-aYO"/>
                 <outlet property="vNext" destination="ZsN-XW-Nwr" id="ovn-zw-XYe"/>
                 <outlet property="vPlayerContainer" destination="saL-b3-NtF" id="WQP-Sa-qef"/>
                 <outlet property="vPlayerControlContainer" destination="84L-fz-csg" id="Mei-7N-bi2"/>

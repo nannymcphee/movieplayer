@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import AVKit
+import SnapKit
 
 protocol VideoPlayerViewDelegate: class {
     func playerView(_ playerView: VideoPlayerView, didUpdate playbackTime: Double)
@@ -45,6 +46,7 @@ class VideoPlayerView: UIView {
     @IBOutlet weak var lbTotalTime: UILabel!
     @IBOutlet weak var slProgress: UISlider!
     @IBOutlet weak var btnFullscreen: UIButton!
+    @IBOutlet weak var vBottomBottomConstraint: NSLayoutConstraint!
     
     
     // MARK: - VARIABLES
@@ -104,8 +106,24 @@ class VideoPlayerView: UIView {
             handlePlayerPlaybackState(playerPlaybackState)
         }
     }
+    private weak var nonFullscreenContainer: UIView!
+    var parentView: UIView!
+    var viewFrame = CGRect.zero
+    var statusBarOrientation: UIInterfaceOrientation? {
+        get {
+            guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else {
+                #if DEBUG
+                fatalError("Could not obtain UIInterfaceOrientation from a valid windowScene")
+                #else
+                return nil
+                #endif
+            }
+            return orientation
+        }
+    }
 
     deinit {
+        NotificationCenter.default.removeObserver(self)
         playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
         removeBoundaryTimeObserver()
         cancelHideControlTimer()
@@ -117,6 +135,7 @@ class VideoPlayerView: UIView {
         self.playerLayer?.frame = self.bounds
     }
     override func awakeFromNib() {
+        addDeviceOrientationNotifications()
         setUpView()
     }
     
@@ -182,21 +201,53 @@ class VideoPlayerView: UIView {
     }
     
     @IBAction func didTapOnButtonDismiss(_ sender: Any) {
-        self.delegate?.didTapOnButtonDismiss(in: self)
+        if isFullscreen {
+            let value = isFullscreen ? UIInterfaceOrientation.portrait.rawValue : UIInterfaceOrientation.landscapeRight.rawValue
+            UIDevice.current.setValue(value, forKey: "orientation")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.didTapOnButtonDismiss(in: self)
+            }
+        } else {
+            self.delegate?.didTapOnButtonDismiss(in: self)
+        }
     }
     
     @IBAction func didTapOnButtonFullscreen(_ sender: UIButton) {
 //        self.delegate?.didTapOnButtonFullscreen(in: self)
-        player?.pause()
-        let controller = AVPlayerViewController()
-        controller.delegate = self
-        controller.player = player
-        controller.modalPresentationStyle = .overFullScreen
-        NotificationCenter.default.addObserver(self, selector: #selector(avPlayerDidDismiss), name: Notification.Name("avPlayerDidDismiss"), object: nil)
-        self.parentViewController()?.present(controller, animated: true) { [weak self] in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.resume()
+//        player?.pause()
+//        let controller = AVPlayerViewController()
+//        controller.delegate = self
+//        controller.player = player
+//        controller.modalPresentationStyle = .overFullScreen
+//        NotificationCenter.default.addObserver(self, selector: #selector(avPlayerDidDismiss), name: Notification.Name("avPlayerDidDismiss"), object: nil)
+//        self.parentViewController()?.present(controller, animated: true) { [weak self] in
+//            guard let self = self else { return }
+//            DispatchQueue.main.async {
+//                self.resume()
+//            }
+//        }
+        
+//        handleFullscreen()
+        let value = isFullscreen ? UIInterfaceOrientation.portrait.rawValue : UIInterfaceOrientation.landscapeRight.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
+    }
+    
+    private func handleFullscreen() {
+        if isFullscreen {
+            removeFromSuperview()
+            layout(view: self, into: nonFullscreenContainer)
+            self.vBottomBottomConstraint.constant = 0
+            isFullscreen = false
+            self.layoutIfNeeded()
+        } else {
+            if let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first {
+                nonFullscreenContainer = superview
+                removeFromSuperview()
+                layout(view: self, into: window, containerIsWindow: true)
+                self.vBottomBottomConstraint.constant = 20
+                self.layoutIfNeeded()
+                isFullscreen = true
             }
         }
     }
@@ -328,6 +379,10 @@ class VideoPlayerView: UIView {
         }
     }
     
+    private func addDeviceOrientationNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationWillChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
     private func setUpAsset(with url: URL, completion: ((_ asset: AVAsset) -> Void)?) {
         asset = AVAsset(url: url)
         asset.loadValuesAsynchronously(forKeys: ["playable"]) {
@@ -358,7 +413,7 @@ class VideoPlayerView: UIView {
             self.player = AVPlayer(playerItem: self.playerItem!)
             self.playerLayer = AVPlayerLayer(player: self.player)
             self.playerLayer.frame = self.vPlayerContainer.bounds
-            self.playerLayer.videoGravity = .resizeAspectFill
+            self.playerLayer.videoGravity = .resizeAspect
             self.vPlayerContainer.layer.addSublayer(self.playerLayer)
             self.addPeriodicTimeObserver()
             self.lbTotalTime.text = durationText
@@ -528,6 +583,23 @@ extension VideoPlayerView {
         }
     }
     
+    /// Layout a view within another view stretching to edges
+    ///
+    /// - Parameters:
+    ///     - view: The view to layout.
+    ///     - into: The container view.
+    fileprivate func layout(view: UIView, into: UIView? = nil, containerIsWindow: Bool = false) {
+        guard let into = into else {
+            return
+        }
+        into.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.leftAnchor.constraint(equalTo: into.leftAnchor).isActive = true
+        view.rightAnchor.constraint(equalTo: into.rightAnchor).isActive = true
+        view.topAnchor.constraint(equalTo: into.topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: into.bottomAnchor).isActive = true
+    }
+    
     fileprivate func makeCircleImageWith(size: CGSize, backgroundColor: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()
@@ -539,6 +611,40 @@ extension VideoPlayerView {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+}
+
+extension VideoPlayerView {
+    @objc private func deviceOrientationWillChange(_ sender: Notification) {
+        let orientation = UIDevice.current.orientation
+        if statusBarOrientation == .portrait {
+            if superview != nil {
+                parentView = (superview)!
+                viewFrame = frame
+            }
+        }
+        switch orientation {
+        case .unknown:
+            break
+        case .faceDown:
+            break
+        case .faceUp:
+            break
+        case .landscapeLeft:
+            onDeviceOrientation(true, orientation: .landscapeLeft)
+        case .landscapeRight:
+            onDeviceOrientation(true, orientation: .landscapeRight)
+        case .portrait:
+            onDeviceOrientation(false, orientation: .portrait)
+        case .portraitUpsideDown:
+            onDeviceOrientation(false, orientation: .portraitUpsideDown)
+        @unknown default:
+            break
+        }
+    }
+    
+    private func onDeviceOrientation(_ fullScreen: Bool, orientation: UIInterfaceOrientation) {
+        handleFullscreen()
     }
 }
 
