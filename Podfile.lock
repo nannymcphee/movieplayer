@@ -5,32 +5,24 @@ PODS:
   - NVActivityIndicatorView (4.8.0):
     - NVActivityIndicatorView/Presenter (= 4.8.0)
   - NVActivityIndicatorView/Presenter (4.8.0)
-  - SnapKit (5.0.1)
   - SwiftyBeaver (1.8.4)
-  - SwipeBack (1.1.1)
 
 DEPENDENCIES:
   - Kingfisher
   - NVActivityIndicatorView
-  - SnapKit
   - SwiftyBeaver
-  - SwipeBack
 
 SPEC REPOS:
   trunk:
     - Kingfisher
     - NVActivityIndicatorView
-    - SnapKit
     - SwiftyBeaver
-    - SwipeBack
 
 SPEC CHECKSUMS:
   Kingfisher: dc6e0f53bb5b12c3e75bedb0e01bbd7a640eea69
   NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
-  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftyBeaver: f9a9aba96a6a6166e21682377804d728b0d20b95
-  SwipeBack: d6759601b40da1f4161033feb30ab475d7d04322
 
-PODFILE CHECKSUM: 222a109e4d5565bca61a50d29302b3134c0d064b
+PODFILE CHECKSUM: 5e668fbc78a5f7aaafc82f0d357fb4ad3d548b23
 
 COCOAPODS: 1.8.4

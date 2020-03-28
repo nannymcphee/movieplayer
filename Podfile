@@ -9,6 +9,4 @@ target 'MoviePlayer' do
   pod 'Kingfisher'
   pod 'SwiftyBeaver'
   pod 'NVActivityIndicatorView'
-  pod 'SwipeBack'
-  pod 'SnapKit'
 end
