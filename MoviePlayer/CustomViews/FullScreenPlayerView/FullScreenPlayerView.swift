@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 import AVKit
-import SnapKit
 
 protocol FullScreenPlayerViewDelegate: class {
     func playerView(_ playerView: FullScreenPlayerView, didUpdate playbackTime: Double)

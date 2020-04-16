@@ -8,7 +8,6 @@
 
 
 import UIKit
-import NVActivityIndicatorView
 
 class BaseViewController: UIViewController {
     //-------------------------------------------------------------------------------------------
@@ -30,7 +29,6 @@ class BaseViewController: UIViewController {
     private let startLoadingOffset: CGFloat = 20.0
     
     var leftSwipeGesture = UIPanGestureRecognizer()
-    var activityData = ActivityData()
     //-------------------------------------------------------------------------------------------
     // MARK: - override method
     //-------------------------------------------------------------------------------------------
@@ -78,7 +76,6 @@ class BaseViewController: UIViewController {
         //    if (self.navigationController?.hero.isEnabled ?? false) || (self.hero.isEnabled) {
         //      self.view.addGestureRecognizer(self.leftSwipeGesture)
         //    }
-        self.activityData = ActivityData(size: CGSize(width: 50, height: 50), message: "", messageFont: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular), type: NVActivityIndicatorType.circleStrokeSpin, color: colorScheme.blue, padding: nil, displayTimeThreshold: 1, minimumDisplayTime: 300, backgroundColor: UIColor.clear, textColor: UIColor.black)
     }
     
     func initRequest() {
@@ -88,13 +85,7 @@ class BaseViewController: UIViewController {
     //-------------------------------------------------------------------------------------------
     // MARK: - Local method
     //-------------------------------------------------------------------------------------------
-    func showLoading() {
-        NVActivityIndicatorPresenter.sharedInstance.startAnimating(self.activityData, nil)
-    }
-    
-    func hideLoading() {
-        NVActivityIndicatorPresenter.sharedInstance.stopAnimating(nil)
-    }
+
     
     /// 뷰컨트롤러에 네비게이션 컨트롤러를 추가해 준다.
     ///

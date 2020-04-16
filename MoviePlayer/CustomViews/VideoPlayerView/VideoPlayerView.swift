@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 import AVKit
-import SnapKit
 
 protocol VideoPlayerViewDelegate: class {
     func playerView(_ playerView: VideoPlayerView, didUpdate playbackTime: Double)

@@ -8,5 +8,4 @@ target 'MoviePlayer' do
   # Pods for MoviePlayer
   pod 'Kingfisher'
   pod 'SwiftyBeaver'
-  pod 'NVActivityIndicatorView'
 end
