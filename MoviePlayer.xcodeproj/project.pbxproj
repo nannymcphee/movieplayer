@@ -13,8 +13,10 @@
 		E134416D242F7A7100C98EE2 /* Ultilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E134416C242F7A7100C98EE2 /* Ultilities.swift */; };
 		E1344170242F7C7700C98EE2 /* FullScreenPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E134416F242F7C7700C98EE2 /* FullScreenPlayerView.swift */; };
 		E1344172242F7C8000C98EE2 /* FullScreenPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1344171242F7C8000C98EE2 /* FullScreenPlayerView.xib */; };
+		E142793E24495F60007AFAC9 /* SheetModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E142793D24495F60007AFAC9 /* SheetModalPresentationController.swift */; };
 		E16BAD1D242E6AC400AA0DE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E16BAD19242E6A8C00AA0DE1 /* AVFoundation.framework */; };
 		E16BAD1E242E6AC400AA0DE1 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E16BAD1A242E6A8C00AA0DE1 /* AVKit.framework */; };
+		E1A5A199244AC0D40038C609 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5A198244AC0D40038C609 /* CustomSlider.swift */; };
 		E1A77578242DC7FD0068D840 /* PlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A77577242DC7FD0068D840 /* PlayerControlView.swift */; };
 		E1A7757A242DC8070068D840 /* PlayerControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A77579242DC8070068D840 /* PlayerControlView.xib */; };
 		E1A7757D242DDD2C0068D840 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A7757C242DDD2C0068D840 /* VideoPlayerView.swift */; };
@@ -146,8 +148,10 @@
 		E134416C242F7A7100C98EE2 /* Ultilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ultilities.swift; sourceTree = "<group>"; };
 		E134416F242F7C7700C98EE2 /* FullScreenPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPlayerView.swift; sourceTree = "<group>"; };
 		E1344171242F7C8000C98EE2 /* FullScreenPlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullScreenPlayerView.xib; sourceTree = "<group>"; };
+		E142793D24495F60007AFAC9 /* SheetModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetModalPresentationController.swift; sourceTree = "<group>"; };
 		E16BAD19242E6A8C00AA0DE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E16BAD1A242E6A8C00AA0DE1 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		E1A5A198244AC0D40038C609 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		E1A77577242DC7FD0068D840 /* PlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlView.swift; sourceTree = "<group>"; };
 		E1A77579242DC8070068D840 /* PlayerControlView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerControlView.xib; sourceTree = "<group>"; };
 		E1A7757C242DDD2C0068D840 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
@@ -384,6 +388,7 @@
 		E1A77596242E28E70068D840 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				E142793D24495F60007AFAC9 /* SheetModalPresentationController.swift */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -658,6 +663,7 @@
 				E1A7757B242DDD040068D840 /* VideoPlayerView */,
 				E1A77576242DC6EF0068D840 /* PlayerControlView */,
 				E1AC0355242D1F8C006EF3F5 /* PlayerView */,
+				E1A5A198244AC0D40038C609 /* CustomSlider.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -877,6 +883,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1AC034E242D1EFC006EF3F5 /* Device.swift in Sources */,
+				E1A5A199244AC0D40038C609 /* CustomSlider.swift in Sources */,
 				E1AC0339242D1EE6006EF3F5 /* EX_CALayer.swift in Sources */,
 				E1AC032A242D1EE6006EF3F5 /* IB_UITextField.swift in Sources */,
 				E134416D242F7A7100C98EE2 /* Ultilities.swift in Sources */,
@@ -911,6 +918,7 @@
 				E1AC033A242D1EE6006EF3F5 /* EX_Optional.swift in Sources */,
 				E1AC0350242D1EFD006EF3F5 /* Helper.swift in Sources */,
 				E1AC033D242D1EE6006EF3F5 /* EX_MediaPlayer.swift in Sources */,
+				E142793E24495F60007AFAC9 /* SheetModalPresentationController.swift in Sources */,
 				E1AC033B242D1EE6006EF3F5 /* EX_NSNumber.swift in Sources */,
 				E1AC0331242D1EE6006EF3F5 /* EX_FloatingPoint.swift in Sources */,
 				E1AC0345242D1EE6006EF3F5 /* EUIViewController.swift in Sources */,

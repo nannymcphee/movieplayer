@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import AVKit
+import MediaPlayer
 
 protocol FullScreenPlayerViewDelegate: class {
     func playerView(_ playerView: FullScreenPlayerView, didUpdate playbackTime: Double)
@@ -44,6 +45,7 @@ class FullScreenPlayerView: UIView {
     @IBOutlet weak var slProgress: UISlider!
     @IBOutlet weak var btnSeekPrevDoubleTap: UIButton!
     @IBOutlet weak var btnSeekNextDoubleTap: UIButton!
+    @IBOutlet weak var slVolume: CustomSlider!
     
     
     // MARK: - VARIABLES
@@ -242,6 +244,13 @@ class FullScreenPlayerView: UIView {
         }
     }
     
+    @IBAction func volumeSliderValueChanged(_ sender: UISlider) {
+        cancelHideControlTimer()
+        changeVolumeThumbImage(progress: sender.value)
+        MPVolumeView.setVolume(sender.value)
+        setUpHideControlTimer()
+    }
+    
     // MARK: - PUBLIC FUNCTIONS
     static func makeInstance(with delegate: FullScreenPlayerViewDelegate) -> FullScreenPlayerView {
         let nib = UINib(nibName: "FullScreenPlayerView", bundle: nil)
@@ -305,6 +314,13 @@ class FullScreenPlayerView: UIView {
             slProgress.setThumbImage(thumbImage, for: .selected)
         }
         
+        if Device.isIpad {
+            slVolume.isHidden = false
+            slVolume.subviews.filter({ $0.isKind(of: UIImageView.self) }).forEach({ $0.backgroundColor = .black })
+            slVolume.setThumbImage(UIImage(named: "icSpeaker0"), for: .normal)
+            slVolume.setValue(AVAudioSession.sharedInstance().outputVolume, animated: false)
+        }
+        
         btnSeekNextDoubleTap.addTarget(self, action: #selector(buttonSeekNextDoubleTapped), for: .touchDownRepeat)
         btnSeekPrevDoubleTap.addTarget(self, action: #selector(buttonSeekPrevDoubleTapped), for: .touchDownRepeat)
     }
@@ -321,6 +337,22 @@ class FullScreenPlayerView: UIView {
         if hideControlTimer != nil {
             hideControlTimer?.invalidate()
             hideControlTimer = nil
+        }
+    }
+    
+    private func changeVolumeThumbImage(progress: Float) {
+        if progress == 0 && progress <= 0.25 {
+            slVolume.setThumbImage(UIImage(named: "icSpeaker0"), for: .normal)
+            slVolume.setThumbImage(UIImage(named: "icSpeaker0"), for: .highlighted)
+        } else if progress > 0.25 && progress <= 0.5 {
+            slVolume.setThumbImage(UIImage(named: "icSpeaker1"), for: .normal)
+            slVolume.setThumbImage(UIImage(named: "icSpeaker1"), for: .highlighted)
+        } else if progress > 0.5 && progress <= 0.75 {
+            slVolume.setThumbImage(UIImage(named: "icSpeaker2"), for: .normal)
+            slVolume.setThumbImage(UIImage(named: "icSpeaker2"), for: .highlighted)
+        } else if progress > 0.75 {
+            slVolume.setThumbImage(UIImage(named: "icSpeaker3"), for: .normal)
+            slVolume.setThumbImage(UIImage(named: "icSpeaker3"), for: .highlighted)
         }
     }
     

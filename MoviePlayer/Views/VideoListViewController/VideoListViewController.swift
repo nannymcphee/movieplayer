@@ -133,7 +133,7 @@ class VideoListViewController: BaseViewController {
     }
     
     private func presentActionSheet(video: Video) {
-        let alertController = UIAlertController(title: "Select Action", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: video.title, message: nil, preferredStyle: .actionSheet)
         let detailAction = UIAlertAction(title: "Go To Detail", style: .default) { [weak self] (action) in
             guard let self = self else { return }
             let detailVC = DetailVideoViewController()
@@ -152,6 +152,14 @@ class VideoListViewController: BaseViewController {
         
         alertController.addAction(detailAction)
         alertController.addAction(fullScreenAction)
+        
+        if Device.isIpad, let popoverController = alertController.popoverPresentationController {
+            if let index = videoList.firstIndex(where: { $0.id == video.id }), let cell = tbVideos.cellForRow(at: IndexPath(row: index, section: 0)) {
+                let cellRect = tbVideos.rectForRow(at: IndexPath(row: index, section: 0))
+                popoverController.sourceView = cell
+                popoverController.sourceRect = cellRect
+            }
+        }
 
         self.present(alertController, animated: true, completion: nil)
     }

@@ -57,7 +57,7 @@ class DetailVideoViewController: BaseViewController {
 
         setUpPlayerView()
         populateData()
-        self.view.addGestureRecognizer(panDismissGesture)
+//        self.view.addGestureRecognizer(panDismissGesture)
     }
 
     deinit {
