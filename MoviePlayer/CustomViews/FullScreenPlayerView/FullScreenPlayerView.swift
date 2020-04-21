@@ -43,19 +43,15 @@ class FullScreenPlayerView: UIView {
     @IBOutlet weak var lbTimePlayed: UILabel!
     @IBOutlet weak var lbTotalTime: UILabel!
     @IBOutlet weak var slProgress: UISlider!
-    @IBOutlet weak var btnSeekPrevDoubleTap: UIButton!
-    @IBOutlet weak var btnSeekNextDoubleTap: UIButton!
     @IBOutlet weak var slVolume: CustomSlider!
+    @IBOutlet weak var btnClose: UIButton!
     
     
     // MARK: - VARIABLES
     weak var delegate: FullScreenPlayerViewDelegate?
     var player: AVPlayer?
-    
     var playerLayer: AVPlayerLayer!
-    
     var videoURL: URL!
-    
     var isPlaying: Bool {
         if player != nil && player?.rate != 0 {
             return true
@@ -63,7 +59,6 @@ class FullScreenPlayerView: UIView {
             return false
         }
     }
-    
     var currentPlayerStatus: AVPlayerItem.Status = .unknown {
         didSet {
             delegate?.playerView(self, didUpdate: currentPlayerStatus)
@@ -86,30 +81,58 @@ class FullScreenPlayerView: UIView {
         }
     }
     private var chaseTime = CMTime.zero
-    
-    private let replayIcon = UIImage(named: "icReplay")!
-    private let pauseIcon = UIImage(named: "icPause")!
-    private let playIcon = UIImage(named: "icPlay")!
+    private var isZoomed: Bool {
+        return self.playerLayer.videoGravity == .resizeAspectFill
+    }
     private var playerPlaybackState = PlayerPlaybackState.paused {
         didSet {
             handlePlayerPlaybackState(playerPlaybackState)
         }
     }
     private weak var nonFullscreenContainer: UIView!
-    var parentView: UIView!
-    var viewFrame = CGRect.zero
-    var statusBarOrientation: UIInterfaceOrientation? {
-        get {
-            guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else {
-                #if DEBUG
-                fatalError("Could not obtain UIInterfaceOrientation from a valid windowScene")
-                #else
-                return nil
-                #endif
-            }
-            return orientation
-        }
-    }
+    
+    private lazy var tapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer()
+        gesture.numberOfTapsRequired = 1
+        gesture.addTarget(self, action: #selector(handleTap))
+        gesture.delaysTouchesBegan = false
+        gesture.cancelsTouchesInView = false
+        gesture.delegate = self
+        gesture.require(toFail: seekBackDoubleTap)
+        gesture.require(toFail: seekForwardDoubleTap)
+        return gesture
+    }()
+    
+    private lazy var seekBackDoubleTap: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer()
+        gesture.numberOfTapsRequired = 2
+        gesture.delaysTouchesBegan = false
+        gesture.cancelsTouchesInView = false
+        gesture.delegate = self
+        gesture.addTarget(self, action: #selector(handleSeekBack))
+        return gesture
+    }()
+    
+    private lazy var seekForwardDoubleTap: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer()
+        gesture.numberOfTapsRequired = 2
+        gesture.delaysTouchesBegan = false
+        gesture.cancelsTouchesInView = false
+        gesture.delegate = self
+        gesture.addTarget(self, action: #selector(handleSeekForward))
+        return gesture
+    }()
+    
+    private lazy var pinchGesture: UIPinchGestureRecognizer = {
+        let gesture = UIPinchGestureRecognizer()
+        gesture.scale = 1
+        gesture.addTarget(self, action: #selector(handlePinch))
+        return gesture
+    }()
+    
+    private let replayIcon = UIImage(named: "icReplay")!
+    private let pauseIcon = UIImage(named: "icPause")!
+    private let playIcon = UIImage(named: "icPlay")!
 
     deinit {
         playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
@@ -211,20 +234,6 @@ class FullScreenPlayerView: UIView {
         }
     }
     
-    @objc func buttonSeekNextDoubleTapped(_ sender: UIButton, event: UIEvent) {
-        guard let touch = event.allTouches?.first else { return }
-        if touch.tapCount >= 2 {
-            self.didTapOnButtonSeekNext(self.btnSeekNext)
-        }
-    }
-    
-    @objc func buttonSeekPrevDoubleTapped(_ sender: UIButton, event: UIEvent) {
-        guard let touch = event.allTouches?.first else { return }
-        if touch.tapCount >= 2 {
-            self.didTapOnButtonSeekPrev(self.btnSeekPrev)
-        }
-    }
-    
     @IBAction func progressSliderValueChanged(_ sender: UISlider) {
         cancelHideControlTimer()
         
@@ -251,6 +260,50 @@ class FullScreenPlayerView: UIView {
         setUpHideControlTimer()
     }
     
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        if vPlayerControlContainer.alpha == 0 || vPlayerControlContainer.isHidden == true {
+            self.animatePlayerControlContainerView(isHidden: false)
+            if self.isPlaying == true {
+                self.setUpHideControlTimer()
+            }
+        } else {
+            self.animatePlayerControlContainerView(isHidden: true)
+        }
+    }
+    
+    @objc private func handleSeekBack(_ sender: UITapGestureRecognizer) {
+        if let currentTime = self.playerItem?.currentTime(), currentTime > CMTime(value: 10, timescale: 1) {
+            btnSeekPrev.doRotateAnimation(rotateAngle: -CGFloat(Double.pi / 4))
+            let currentSeconds = CMTimeGetSeconds(currentTime)
+            let value = currentSeconds.advanced(by: -10)
+            let newChaseTime = CMTime(value: Int64(value), timescale: 1)
+            self.stopPlayingAndSeekSmoothlyToTime(newChaseTime: newChaseTime)
+        }
+    }
+    
+    @objc private func handleSeekForward(_ sender: UITapGestureRecognizer) {
+        if let currentTime = self.playerItem?.currentTime() {
+            btnSeekNext.doRotateAnimation(duration: 0.2, rotateAngle: CGFloat(Double.pi / 4))
+            let currentSeconds = CMTimeGetSeconds(currentTime)
+            let value = currentSeconds.advanced(by: 10)
+            let newChaseTime = CMTime(value: Int64(value), timescale: 1)
+            self.stopPlayingAndSeekSmoothlyToTime(newChaseTime: newChaseTime)
+        }
+    }
+    
+    @objc private func handlePinch(_ sender: UIPinchGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            if self.isZoomed {
+                self.playerLayer.videoGravity = .resizeAspect
+            } else {
+                self.playerLayer.videoGravity = .resizeAspectFill
+            }
+        default:
+            break
+        }
+    }
+    
     // MARK: - PUBLIC FUNCTIONS
     static func makeInstance(with delegate: FullScreenPlayerViewDelegate) -> FullScreenPlayerView {
         let nib = UINib(nibName: "FullScreenPlayerView", bundle: nil)
@@ -261,7 +314,7 @@ class FullScreenPlayerView: UIView {
         return fullScreenPlayerView
     }
     
-    func play(with url: URL) {
+    public func play(with url: URL) {
         setUpAsset(with: url) { [weak self] (asset: AVAsset) in
             guard let self = self else { return }
             self.setUpPlayerItem(with: asset)
@@ -269,45 +322,39 @@ class FullScreenPlayerView: UIView {
         }
     }
     
-    func pause() {
+    public func pause() {
         player?.pause()
         playerPlaybackState = .paused
     }
     
-    func resume() {
+    public func resume() {
         player?.play()
         playerPlaybackState = .playing
         setUpHideControlTimer()
     }
     
-    func replayVideo() {
+    public func replayVideo() {
         stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime.zero)
     }
     
-    func showLoading() {
+    public func showLoading() {
         self.loadingActivityIndicator.startAnimating()
     }
     
-    func hideLoading() {
+    public func hideLoading() {
         self.loadingActivityIndicator.stopAnimating()
     }
     
     // MARK: - PRIVATE FUNCTIONS
     private func setUpView() {
         playerPlaybackState = .loading
-        vPlayerContainer.addTapGestureRecognizer { [weak self] in
-            guard let self = self else { return }
-            self.animatePlayerControlContainerView(isHidden: false)
-            if self.isPlaying == true {
-                self.setUpHideControlTimer()
-            }
-        }
+        
+        self.addGestureRecognizer(tapGesture)
+        self.addGestureRecognizer(seekBackDoubleTap)
+        self.addGestureRecognizer(seekForwardDoubleTap)
+        self.addGestureRecognizer(pinchGesture)
         
         self.vPlayerControlContainer.alpha = 0
-        self.vPlayerControlContainer.addTapGestureRecognizer { [weak self] in
-            guard let self = self else { return }
-            self.animatePlayerControlContainerView(isHidden: true)
-        }
         
         if let thumbImage = makeCircleImageWith(size: CGSize(width: 16, height: 16), backgroundColor: .red) {
             slProgress.setThumbImage(thumbImage, for: .normal)
@@ -320,9 +367,6 @@ class FullScreenPlayerView: UIView {
             slVolume.setThumbImage(UIImage(named: "icSpeaker0"), for: .normal)
             slVolume.setValue(AVAudioSession.sharedInstance().outputVolume, animated: false)
         }
-        
-        btnSeekNextDoubleTap.addTarget(self, action: #selector(buttonSeekNextDoubleTapped), for: .touchDownRepeat)
-        btnSeekPrevDoubleTap.addTarget(self, action: #selector(buttonSeekPrevDoubleTapped), for: .touchDownRepeat)
     }
     
     private func setUpHideControlTimer() {
@@ -475,19 +519,18 @@ class FullScreenPlayerView: UIView {
         }
     }
     
-    func stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime) {
+    private func stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime) {
         player?.pause()
         
         if CMTimeCompare(newChaseTime, chaseTime) != 0 {
-            chaseTime = newChaseTime;
-            
+            chaseTime = newChaseTime
             if !isSeekInProgress {
                 trySeekToChaseTime()
             }
         }
     }
     
-    func trySeekToChaseTime() {
+    private func trySeekToChaseTime() {
         if currentPlayerStatus == .unknown {
             // wait until item becomes ready (KVO player.currentItem.status)
         } else if currentPlayerStatus == .readyToPlay {
@@ -495,7 +538,7 @@ class FullScreenPlayerView: UIView {
         }
     }
     
-    func actuallySeekToTime() {
+    private func actuallySeekToTime() {
         isSeekInProgress = true
         let seekTimeInProgress = chaseTime
         player?.seek(to: seekTimeInProgress, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero, completionHandler: { [weak self] (isFinished) in
@@ -512,6 +555,39 @@ class FullScreenPlayerView: UIView {
 }
 
 // MARK: - EXTENSIONS
+extension FullScreenPlayerView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchView = touch.view
+        if touchView == btnPlayPause || touchView == btnSeekNext || touchView == btnSeekPrev || touchView == btnClose {
+            return false
+        }
+        return true
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let frame = self.bounds
+        if gestureRecognizer == seekForwardDoubleTap {
+            let seekForwardRect = CGRect(x: frame.size.width - frame.size.width / 3,
+                                         y: frame.origin.y,
+                                         width: frame.size.width / 3,
+                                         height: frame.size.height)
+            return seekForwardRect.contains(gestureRecognizer.location(in: self))
+        }
+        
+        if gestureRecognizer == seekBackDoubleTap {
+            let seekBackdRect = CGRect(x: 0,
+                                         y: frame.origin.y,
+                                         width: frame.size.width / 3,
+                                         height: frame.size.height)
+            return seekBackdRect.contains(gestureRecognizer.location(in: self))
+        }
+        
+        return true
+    }
+    
+    
+}
+
 extension FullScreenPlayerView {
     // Animation functions
     private func animatePlayPauseButtonImage(isPlaying: Bool) {
@@ -546,23 +622,6 @@ extension FullScreenPlayerView {
         }) { (finished) in
 
         }
-    }
-    
-    /// Layout a view within another view stretching to edges
-    ///
-    /// - Parameters:
-    ///     - view: The view to layout.
-    ///     - into: The container view.
-    fileprivate func layout(view: UIView, into: UIView? = nil, containerIsWindow: Bool = false) {
-        guard let into = into else {
-            return
-        }
-        into.addSubview(view)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.leftAnchor.constraint(equalTo: into.leftAnchor).isActive = true
-        view.rightAnchor.constraint(equalTo: into.rightAnchor).isActive = true
-        view.topAnchor.constraint(equalTo: into.topAnchor).isActive = true
-        view.bottomAnchor.constraint(equalTo: into.bottomAnchor).isActive = true
     }
     
     fileprivate func makeCircleImageWith(size: CGSize, backgroundColor: UIColor) -> UIImage? {
